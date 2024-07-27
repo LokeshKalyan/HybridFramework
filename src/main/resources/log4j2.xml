@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+	<Properties>
+		<Property name="filePath">ExecutionReport/Log_Files</Property>
+		<Property name="archivedfilePath">ExecutionReport/Log_Files/archived</Property>
+		<Property name="fileName">Zurich-AT</Property>
+		<Property name = "appLogPattern">%d{yyyy-MM-dd HH:mm:ss.SSS}   [%level] [%t] %c{1} - %msg%n</Property>
+		<Property name = "errorLogPattern">%d{yyyy-MM-dd HH:mm:ss.SSS} [%level] [%t] (%F:%L) %c{1} - %msg%n %throwable</Property>
+	</Properties>
+
+
+	<Appenders>
+		<RollingFile name="fileLogger"
+			fileName="${filePath}/${fileName}.log"
+			filePattern="${archivedfilePath}/${fileName}-%d{yyyy-MM-dd}.log">
+			<ThresholdFilter level="TRACE" onMatch="ACCEPT" onMismatch="DENY"/>
+			<PatternLayout>
+				<pattern>
+					${appLogPattern}
+				</pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+			</Policies>
+		</RollingFile>
+
+		<RollingFile name="error_fileLogger"
+			fileName="${filePath}/error_${fileName}.log"
+			filePattern="${archivedfilePath}/error_${fileName}-%d{yyyy-MM-dd}.log">
+			<ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+			<PatternLayout>
+				<pattern>
+					 ${errorLogPattern}
+				</pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+			</Policies>
+		</RollingFile>
+	 <Console name="console" target="SYSTEM_OUT" follow="true">
+	 <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="ACCEPT"/>
+			<PatternLayout> 
+			<pattern>
+			 	${appLogPattern}
+			 </pattern> 
+			 </PatternLayout>
+		</Console>
+		
+		<Console name="error_console" target="SYSTEM_ERR" follow="true">
+		   <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+			<PatternLayout> 
+			<pattern>
+				 ${appLogPattern}
+			 </pattern> 
+			 </PatternLayout>
+		</Console>
+	
+	</Appenders>
+    
+	<Loggers>
+
+		<Logger name="com.dxc" level="INFO" additivity="false">
+			<appender-ref ref="fileLogger" />
+			<appender-ref ref="console" />
+			<appender-ref ref="error_console"/>
+		</Logger>
+
+		<!-- 		For all other logs -->
+		<Root level="INFO" additivity="false">
+			<appender-ref ref="fileLogger"  />
+			<appender-ref ref="console" />
+			<appender-ref ref="error_console"/>
+		</Root>
+		<Logger name="error_log" level="ERROR" additivity="false">
+			<appender-ref ref="error_fileLogger" />
+		</Logger>
+	</Loggers>
+</Configuration>
