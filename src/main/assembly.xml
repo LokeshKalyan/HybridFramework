@@ -1,0 +1,49 @@
+This XML file does not appear to have any style information associated with it. The document tree is shown below.
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+<id>UKLifeAutomation</id>
+<formats>
+<!--  Files will be compressed as single zip file  -->
+<format>tar.gz</format>
+<format>zip</format>
+</formats>
+<baseDirectory>${basedir}</baseDirectory>
+<includeBaseDirectory>false</includeBaseDirectory>
+<dependencySets>
+<dependencySet>
+<!-- 
+                Project artifact is not copied under library directory since
+                it is added to the root directory of the zip package.
+             -->
+<useProjectArtifact>false</useProjectArtifact>
+<outputDirectory>lib</outputDirectory>
+<unpack>false</unpack>
+</dependencySet>
+</dependencySets>
+<!--  File Sets to be Processed  -->
+<fileSets>
+<!--  Process Conf File  -->
+<fileSet>
+<directory>${resourcesdir}</directory>
+<outputDirectory>resources</outputDirectory>
+<includes>
+<include>**/*</include>
+</includes>
+</fileSet>
+<fileSet>
+<directory>${project.build.directory}</directory>
+<outputDirectory/>
+<includes>
+<include>*.jar</include>
+</includes>
+</fileSet>
+<fileSet>
+<outputDirectory>lib</outputDirectory>
+<directory>${project.basedir}/src/main/externalLibs/</directory>
+</fileSet>
+<fileSet>
+<!--  			<outputDirectory>scripts</outputDirectory>  -->
+<outputDirectory/>
+<directory>${project.basedir}/src/main/scripts/</directory>
+</fileSet>
+</fileSets>
+</assembly>
